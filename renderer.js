@@ -14,7 +14,19 @@ export class Renderer {
     this.entities = this.schema.map(
       (e, i) => new EntityRenderer(e, 50, i * 150)
     );
+    this.setupConnections();
+    this.moving = false;
     this.setupMouse();
+  }
+
+  setupConnections() {
+    const map = new Map();
+    this.entities.forEach(e => map.set(e.entity.name, e));
+    this.entities.forEach(e =>
+      (e.entity.relations || []).forEach(r =>
+        e.relations.push(map.get(r.entity))
+      )
+    );
   }
 
   render() {
@@ -22,19 +34,29 @@ export class Renderer {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.entities.forEach(e => {
         this.context.drawImage(e.canvas, e.x, e.y);
+        this.drawConnections(e);
       });
 
+      if (!this.moving) return;
       requestAnimationFrame(animate);
     };
 
     requestAnimationFrame(animate);
   }
 
+  drawConnections(e) {
+    for (const conn of e.relations) {
+      this.context.beginPath();
+      this.context.moveTo(e.conn.x + e.x, e.conn.y + e.y);
+      this.context.lineTo(conn.conn.x + conn.x, conn.conn.y + conn.y);
+      this.context.stroke();
+      this.context.closePath();
+    }
+  }
+
   setupMouse() {
-    let moving = false;
     let movingEntities = [];
     this.canvas.addEventListener("mousedown", ev => {
-      moving = true;
       movingEntities = this.entities.filter(
         e =>
           ev.offsetX > e.x &&
@@ -42,10 +64,12 @@ export class Renderer {
           ev.offsetY > e.y &&
           ev.offsetY < e.y + e.canvas.height
       );
+      this.moving = !!movingEntities.length;
+      if (this.moving) this.render();
     });
-    document.addEventListener("mouseup", () => (moving = false));
+    document.addEventListener("mouseup", () => (this.moving = false));
     this.canvas.addEventListener("mousemove", ev => {
-      if (!moving) return;
+      if (!this.moving) return;
       movingEntities.forEach(e => {
         e.x += ev.movementX;
         e.y += ev.movementY;

@@ -7,12 +7,17 @@ export class EntityRenderer {
     this.entity = entity;
     this.canvas = document.createElement("canvas");
     this.context = this.canvas.getContext("2d");
-    this.fontSize = 100;
+    this.fontSize = 50;
     this.gap = this.fontSize / 10;
     this.lineWidth = this.fontSize / 5;
     this.width = this.getWidth(entity.name);
     this.canvas.width = this.width + this.gap * 2;
     this.canvas.height = this.fontSize + this.gap;
+    this.relations = [];
+    this.conn = {
+      x: this.canvas.width / 2,
+      y: this.canvas.height
+    };
     this.drawRect();
   }
 
@@ -35,7 +40,6 @@ export class EntityRenderer {
       this.canvas.width / 2,
       this.fontSize - this.gap
     );
-
     this.context.stroke();
     this.context.closePath();
   }

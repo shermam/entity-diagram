@@ -41,6 +41,9 @@ export const schema = [
     relations: [
       {
         entity: "Area"
+      },
+      {
+        entity: "Mill"
       }
     ]
   },

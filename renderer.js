@@ -32,10 +32,8 @@ export class Renderer {
   render() {
     const animate = () => {
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      this.entities.forEach(e => {
-        this.context.drawImage(e.canvas, e.x, e.y);
-        this.drawConnections(e);
-      });
+      this.entities.forEach(e => this.drawConnections(e));
+      this.entities.forEach(e => this.context.drawImage(e.canvas, e.x, e.y));
 
       if (!this.moving) return;
       requestAnimationFrame(animate);

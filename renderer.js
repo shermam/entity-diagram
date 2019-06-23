@@ -11,6 +11,8 @@ export class Renderer {
     this.canvas.height = innerHeight;
     this.container.appendChild(this.canvas);
     this.schema = schema;
+
+    // TODO the positioning of the entities should be automatic
     this.entities = this.schema.map(
       (e, i) => new EntityRenderer(e, 50, i * 150)
     );

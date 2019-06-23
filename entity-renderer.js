@@ -1,4 +1,5 @@
 //@ts-check
+import { config } from "./config.js";
 
 export class EntityRenderer {
   constructor(entity, x, y) {
@@ -7,9 +8,9 @@ export class EntityRenderer {
     this.entity = entity;
     this.canvas = document.createElement("canvas");
     this.context = this.canvas.getContext("2d");
-    this.fontSize = 50;
-    this.gap = this.fontSize / 2;
-    this.lineWidth = this.fontSize / 5;
+    this.fontSize = config.entity.fontSize;
+    this.gap = config.entity.gap;
+    this.lineWidth = config.entity.lineWidth;
     this.width = this.getWidth(entity.name);
     this.canvas.width = this.width + this.gap * 2;
     this.canvas.height = this.fontSize + this.gap;
@@ -22,22 +23,26 @@ export class EntityRenderer {
   }
 
   getWidth(name) {
-    this.context.font = `${this.fontSize}px Arial`;
+    this.context.font = `${this.fontSize}px ${config.entity.fontName}`;
     const measure = this.context.measureText(name);
     return measure.width;
   }
 
   drawRect() {
     this.context.beginPath();
-    this.context.fillStyle = "#FFFFFF";
+    this.context.fillStyle = config.entity.backgroundColor;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.font = `${this.fontSize}px ${config.entity.fontName}`;
+    this.context.strokeStyle = config.entity.borderColor;
+    this.context.lineWidth = this.lineWidth;
+    this.context.fillStyle = config.entity.fontColor;
+    this.context.rect(0, 0, this.canvas.width, this.canvas.height);
+
+    // TODO Extract text alignment options to config
+    // To extract these option the place where the text is drawn
+    // also must be dinamic
     this.context.textAlign = "center";
     this.context.textBaseline = "middle";
-    this.context.font = `${this.fontSize}px Arial`;
-    this.context.strokeStyle = "#000000";
-    this.context.lineWidth = this.lineWidth;
-    this.context.fillStyle = "#000000";
-    this.context.rect(0, 0, this.canvas.width, this.canvas.height);
     this.context.fillText(
       this.entity.name,
       this.canvas.width / 2,

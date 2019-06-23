@@ -2,7 +2,7 @@
 
 export const schema = [
   {
-    name: "Mill",
+    name: "Entity1",
     properties: [
       {
         name: "Name"
@@ -13,7 +13,7 @@ export const schema = [
     ]
   },
   {
-    name: "Area",
+    name: "Entity2",
     properties: [
       {
         name: "Name"
@@ -24,12 +24,12 @@ export const schema = [
     ],
     relations: [
       {
-        entity: "Mill"
+        entity: "Entity1"
       }
     ]
   },
   {
-    name: "Subarea",
+    name: "Entity3",
     properties: [
       {
         name: "Name"
@@ -40,15 +40,15 @@ export const schema = [
     ],
     relations: [
       {
-        entity: "Area"
+        entity: "Entity2"
       },
       {
-        entity: "Mill"
+        entity: "Entity1"
       }
     ]
   },
   {
-    name: "Equipment",
+    name: "Entity4",
     properties: [
       {
         name: "Name"
@@ -59,7 +59,7 @@ export const schema = [
     ],
     relations: [
       {
-        entity: "Subarea"
+        entity: "Entity3"
       }
     ]
   }
